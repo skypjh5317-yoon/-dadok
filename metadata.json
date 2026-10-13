@@ -1,0 +1,8 @@
+{
+  "name": "다독임 - 상처받은 마음을 감싸는 온기",
+  "description": "차별과 편견으로 상처받은 학생들을 위해 따뜻한 공감 대화와 위로, 마음 안정 가이드를 제공하는 감성 치유 쉼터입니다.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
