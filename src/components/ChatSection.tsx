@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Sparkles, Volume2, VolumeX, RotateCcw, Heart, ShieldAlert } from 'lucide-react';
+import { generateSituationalComfort } from '../utils/comfortEngine.ts';
 
 export interface ChatMessage {
   id: string;
@@ -103,20 +104,15 @@ export const ChatSection: React.FC = () => {
 
       setMessages(prev => [...prev, modelMessage]);
     } catch (err) {
-      console.error('Chat error:', err);
-      // Gentle fallback
+      console.warn('Backend API unavailable, using intelligent client empathy engine:', err);
+      const fallbackData = generateSituationalComfort(userText, newMessages);
       const fallbackMessage: ChatMessage = {
         id: `model-${Date.now()}`,
         role: 'model',
-        content:
-          '네 마음속 그 슬픔과 억울함이 얼마나 무거울지 가늠조차 어려워. 하지만 분명히 기억해줘. 다른 사람의 편협한 시선이 너의 가치를 결정할 수는 없어. 넌 여전히 눈부시게 소중한 존재란다. 오늘 하루를 버텨낸 너 자신을 꼭 따뜻하게 안아줘.',
-        affirmation: '너는 결코 혼자가 아니며, 너의 내일은 오늘보다 더 환할 거야.',
-        mindfulnessTip: '가슴 위에 손을 가만히 얹고, 심장이 전해주는 따스한 고동을 느껴보세요.',
-        suggestedReplies: [
-          '내 편이 되어줘서 고마워.',
-          '앞으로 어떻게 마음을 다잡아야 할까?',
-          '마음이 조금 가벼워졌어.'
-        ],
+        content: fallbackData.reply,
+        affirmation: fallbackData.affirmation,
+        mindfulnessTip: fallbackData.mindfulnessTip,
+        suggestedReplies: fallbackData.suggestedReplies,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages(prev => [...prev, fallbackMessage]);

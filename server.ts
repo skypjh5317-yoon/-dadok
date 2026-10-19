@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
+import { generateSituationalComfort } from './src/utils/comfortEngine.ts';
 
 dotenv.config();
 
@@ -123,13 +124,14 @@ ${messages.map((m: { role: string; content: string }) => `${m.role === 'user' ? 
       }
     }
 
-    // Fallback if AI not configured or error
-    const randomFallback = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
-    return res.json(randomFallback);
+    // Dynamic situational empathy fallback if AI not configured or key missing
+    const fallback = generateSituationalComfort(lastUserMessage, messages);
+    return res.json(fallback);
   } catch (error) {
     console.error('Error generating comfort chat:', error);
-    const randomFallback = fallbackResponses[0];
-    return res.json(randomFallback);
+    const lastUserMessage = req.body?.messages?.[req.body.messages.length - 1]?.content || '';
+    const fallback = generateSituationalComfort(lastUserMessage);
+    return res.json(fallback);
   }
 });
 
